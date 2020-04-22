@@ -1,0 +1,74 @@
+{
+  "exp": {
+    "name": "cihp_simple_train"
+  },
+  "data_loader": {
+    "name": "data_loader.DataLoader",
+    "datagen_name": "data_generator.CIHPDataGenerator",
+    "base_args": {
+      "target_shape": [
+        256,
+        256
+      ],
+      "num_classes": 20,
+      "batch_size": 4,
+      "shuffle": true,
+      "seed": 42
+    },
+    "train_args": {
+      "source_dir": "data/cihp/Training/Images/",
+      "groundtruth_dir": "data/cihp/Training/Category_ids/",
+      "augmentation": false
+    },
+    "val_args": {
+      "source_dir": "data/cihp/Validation/Images/",
+      "groundtruth_dir": "data/cihp/Validation/Category_ids/",
+      "augmentation": false
+    },
+    "test_args": {
+      "source_dir": "data/cihp/Testing/Images/",
+      "groundtruth_dir": ""
+    }
+  },
+  "model": {
+    "name": "UNet.UNet",
+    "args": {
+      "input_size": [
+        256,
+        256,
+        3
+      ]
+    }
+  },
+  "engine": {
+    "name": "simple_trainer.SimpleUNetTrainer",
+    "checkpoint": "",
+    "num_epochs": 40,
+    "steps_per_epoch": 20000,
+    "workers": 4,
+    "verbose": 1,
+    "loss": "categorical_crossentropy",
+    "optimizer": {
+      "name": "tensorflow.keras.optimizers.Adam",
+      "args": {
+        "lr": 0.0001
+      }
+    },
+    "callbacks": {
+      "checkpoint": {
+        "monitor": "val_loss",
+        "mode": "auto",
+        "save_best_only": false,
+        "save_weights_only": true,
+        "verbose": 1,
+        "save_freq": "epoch"
+      },
+      "tensorboard": {
+        "histogram_freq": 1,
+        "write_graph": true,
+        "write_images": true,
+        "update_freq": "batch"
+      }
+    }
+  }
+}

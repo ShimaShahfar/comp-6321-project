@@ -1,0 +1,8 @@
+class BaseEngine(object):
+    def __init__(self, model, data, config):
+        self.model = model
+        self.data = data
+        self.config = config
+
+    def run(self):
+        raise NotImplementedError
